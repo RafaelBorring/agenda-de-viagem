@@ -1,0 +1,109 @@
+{% extends 'admin/change_list.html' %}
+{% load staticfiles %}
+
+{% block object-tools %}
+{{ block.super }}
+
+<style>
+.modalDialog {
+  position: fixed;
+  font-family: Arial, Helvetica, sans-serif;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: rgba(0,0,0,0.8);
+  z-index: 99999;
+  opacity:0;
+  -webkit-transition: opacity 400ms ease-in;
+  -moz-transition: opacity 400ms ease-in;
+  transition: opacity 400ms ease-in;
+  pointer-events: none;
+}
+.modalDialog:target {
+  opacity:1;
+  pointer-events: auto;
+}
+.modalDialog > div {
+  width: 80%;
+  height: 90%;
+  position: relative;
+  margin: 1% auto;
+  padding: 5px 20px 13px 20px;
+  border-radius: 10px;
+  background: #fff;
+}
+.closeModal {
+  background: #606061;
+  color: #FFFFFF;
+  line-height: 25px;
+  position: absolute;
+  right: -12px;
+  text-align: center;
+  top: -10px;
+  width: 24px;
+  text-decoration: none;
+  font-weight: bold;
+  -webkit-border-radius: 12px;
+  -moz-border-radius: 12px;
+  border-radius: 12px;
+  -moz-box-shadow: 1px 1px 3px #000;
+  -webkit-box-shadow: 1px 1px 3px #000;
+  box-shadow: 1px 1px 3px #000;
+}
+.closeModal:after {
+  content: "\d7";
+}
+.closeModal:hover {
+  background: #f00;
+}
+</style>
+
+    <ul class="object-tools">
+        <ul class="object-tools">
+            <li>
+                {% if request.GET.date__day %}
+                {% with year=request.GET.date__year month=request.GET.date__month day=request.GET.date__day %}
+                <a href="#openModal">Imprimir</a>
+                <div id="openModal" class="modalDialog">
+                  <div>
+                    <a href="#close" title="Close" class="closeModal"></a>
+                    <!-- Conteúdo do Modal -->
+                    <object type="application/pdf" data="{% url 'core.print' year month day %}#zoom=page-width" width="100%" height="100%"></object>
+                    <!-- Conteúdo do Modal -->
+                  </div>
+                </div>
+                {% endwith %}
+                {% endif %}
+            </li>
+            <li>
+                <a href="/vagas" class="addlink">Vagas</a>
+            </li>
+            <li>
+                <a href="#openModal2">Folha Extra</a>
+                <div id="openModal2" class="modalDialog">
+                  <div>
+                    <a href="#close" title="Close" class="closeModal"></a>
+                    <!-- Conteúdo do Modal -->
+                    <object type="application/pdf" data="/folder/#zoom=page-width" width="100%" height="100%"></object>
+                    <!-- Conteúdo do Modal -->
+                  </div>
+                </div>
+            </li>
+            <li>
+                <a href="#openModal3">Etiquetas</a>
+                <div id="openModal3" class="modalDialog">
+                  <div>
+                    <a href="#close" title="Close" class="closeModal"></a>
+                    <!-- Conteúdo do Modal -->
+                    <object type="application/pdf" data="/etiqueta/#zoom=page-width" width="100%" height="100%"></object>
+                    <!-- Conteúdo do Modal -->
+                  </div>
+                </div>
+            </li>
+            <li>
+                <a href="/backup" class="addlink">Backup</a>
+            </li>
+        </ul>
+    </ul>
+{% endblock %}

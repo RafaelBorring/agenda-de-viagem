@@ -41,3 +41,66 @@ class UserRegister(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class List(models.Model):
+    cns = models.CharField('Cartão SUS', max_length=18, blank=True)
+    name = models.CharField('Nome', max_length=100, blank=True)
+    reference = models.CharField('Referência', max_length=30, blank=True)
+    address = models.CharField('Endereço', max_length=100, blank=True)
+    local = models.CharField('Destino', max_length=23, blank=True)
+    date = models.DateField('Data', blank=True)
+    hour = models.TimeField('Hora', default='07:00:00', choices=HOUR_CHOICES, blank=True)
+    car = models.ForeignKey('CarType', on_delete=models.CASCADE, verbose_name='Tipo', blank=True)
+    telephone = models.CharField('Telefone', max_length=15, blank=True)
+    goal = models.CharField('Finalidade', max_length=23, blank=True)
+    search = models.CharField('Local onde pegará o transporte', max_length=30, blank=True)
+    note = models.CharField('Observação', max_length=15, blank=True)
+    companion = models.DecimalField('Acompanhante', default=0, blank=True, max_digits=2, decimal_places=0)
+    id_companion = models.IntegerField('ID do Acompanhante', null=True, blank=True)
+    create_on = models.DateField('Criado em:', auto_now_add=True, blank=True)
+    update_on = models.DateField('Atualizado em:', auto_now=True, blank=True)
+
+    class Meta:
+        verbose_name = 'Lista de Passageiros'
+        verbose_name_plural = 'Listas de Passageiros'
+
+    def __str__(self):
+        return self.name
+
+
+class Holiday(models.Model):
+    name = models.CharField('Feriado de', max_length=50)
+    date = models.DateField('Dia', unique=True)
+
+    class Meta:
+        verbose_name = 'Feriado'
+        verbose_name_plural = 'Feriados'
+
+    def __str__(self):
+        return self.name
+
+
+class City(models.Model):
+    name = models.CharField('Município', max_length=50)
+
+    class Meta:
+        verbose_name = 'Município'
+        verbose_name_plural = 'Municípios'
+
+    def __str__(self):
+        return self.name
+
+
+class CarType(models.Model):
+    description = models.CharField('Descrição', max_length=50, unique=True)
+    type = models.CharField('Tipo', max_length=1, choices=CAR)
+    destiny = models.ForeignKey('City', on_delete=models.CASCADE, verbose_name='Destino')
+    vacancy = models.DecimalField('N° de Vagas', max_digits=2, decimal_places=0)
+
+    class Meta:
+        verbose_name = 'Veículo'
+        verbose_name_plural = 'Veículos'
+
+    def __str__(self):
+        return self.description
