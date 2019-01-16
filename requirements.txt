@@ -1,2 +1,5 @@
 Django==2.1.5
+Pillow==5.4.1
+PyPDF2==1.26.0
 pytz==2018.9
+reportlab==3.5.13
