@@ -124,17 +124,17 @@ class ListAdmin(admin.ModelAdmin):
         else:
             cname = '{} {}'.format('Acompanhante de', split_name[0])
         if change:
-            models.List.objects.filter(id_companio=obj.id).delete()
+            models.List.objects.filter(id_companion=obj.id).delete()
             while obj.companion > 0:
-                models.List(name=cname, date=obj.date, car=obj.car, id_companio=obj.id).save()
+                models.List(name=cname, date=obj.date, car=obj.car, id_companion=obj.id).save()
                 obj.companion -= 1
         if obj.companion > 0 and not change:
             while obj.companion > 0:
-                models.List(name=cname, date=obj.date, car=obj.car, id_companio=obj.id).save()
+                models.List(name=cname, date=obj.date, car=obj.car, id_companion=obj.id).save()
                 obj.companion -= 1
 
     def delete_model(self, request, obj):
-        models.List.objects.filter(id_companio=obj.id).delete()
+        models.List.objects.filter(id_companion=obj.id).delete()
         obj.delete()
 
     def get_readonly_fields(self, request, obj=None):

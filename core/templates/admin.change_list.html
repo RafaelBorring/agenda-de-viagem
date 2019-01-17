@@ -68,25 +68,21 @@
                 <div id="openModal" class="modalDialog">
                   <div>
                     <a href="#close" title="Close" class="closeModal"></a>
-                    <!-- Conteúdo do Modal -->
                     <object type="application/pdf" data="{% url 'core.print' year month day %}#zoom=page-width" width="100%" height="100%"></object>
-                    <!-- Conteúdo do Modal -->
                   </div>
                 </div>
                 {% endwith %}
                 {% endif %}
             </li>
             <li>
-                <a href="/vagas" class="addlink">Vagas</a>
+                <a href="/vacancy" class="addlink">Vagas</a>
             </li>
             <li>
                 <a href="#openModal2">Folha Extra</a>
                 <div id="openModal2" class="modalDialog">
                   <div>
                     <a href="#close" title="Close" class="closeModal"></a>
-                    <!-- Conteúdo do Modal -->
                     <object type="application/pdf" data="/folder/#zoom=page-width" width="100%" height="100%"></object>
-                    <!-- Conteúdo do Modal -->
                   </div>
                 </div>
             </li>
@@ -95,9 +91,7 @@
                 <div id="openModal3" class="modalDialog">
                   <div>
                     <a href="#close" title="Close" class="closeModal"></a>
-                    <!-- Conteúdo do Modal -->
-                    <object type="application/pdf" data="/etiqueta/#zoom=page-width" width="100%" height="100%"></object>
-                    <!-- Conteúdo do Modal -->
+                    <object type="application/pdf" data="/tag/#zoom=page-width" width="100%" height="100%"></object>
                   </div>
                 </div>
             </li>

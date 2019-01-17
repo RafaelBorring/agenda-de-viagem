@@ -1,0 +1,28 @@
+.table-condensed {
+    border-collapse: separate !important;
+    border-spacing: 5px 5px !important;
+    display: table !important;
+    white-space: pre-line !important;
+    word-break: break-all !important;
+}
+
+.table-condensed > thead > tr > th {
+    background-color: #A0A0A0  !important;
+    border-radius: 10px !important;
+    border: 10px 10px 10px 10px !important;
+    border-color: #A0A0A0 !important;
+    text-align: center !important;
+}
+
+.table-condensed > tbody > tr > td {
+    background-color: #D0D0D0 !important;
+    border-radius: 10px !important;
+    border: 10px 10px 10px 10px !important;
+    border-color: #D0D0D0 !important;
+    font-size: 12px !important;
+}
+
+@page {
+    size: A4;
+    margin: 1cm 0cm;
+}

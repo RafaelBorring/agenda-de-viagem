@@ -1,0 +1,31 @@
+{% extends 'core.index.html' %}
+{% load static %}
+{% block stylesheet %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/core.vacancy.css' %}">
+{% endblock stylesheet %}
+{% block main %}
+<main>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="d-flex justify-content-center">
+                    <button type="button" onclick="location.href='/core/list/'" class="btn">Voltar para lista</button>                    
+                    <button type="button" onclick="location.href='/vacancy'" class="btn">Hoje</button>
+                </div>
+                {% load vacancy %}
+                <div class="d-flex justify-content-center">
+                    <button type="button" onclick="location.href='/vacancy/{{ previous_year }}/{{ previous_month }}/'" class="btn">{{ previous_month_name }} {{ previous_year }}</button>
+                    {% event_calendar year month event_list %}
+                    <button type="button" onclick="location.href='/vacancy/{{ next_year }}/{{ next_month }}/'" class="btn">{{ next_month_name }} {{ next_year }}</button>
+                </div> 
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock main %}
