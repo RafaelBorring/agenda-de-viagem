@@ -50,6 +50,25 @@ class ListForm(forms.ModelForm):
         model = models.List
         fields = '__all__'
 
+    def clean(self):
+        cns = self.cleaned_data['cns']
+        date = self.cleaned_data['date']
+        car = self.cleaned_data['car']
+        companion = self.cleaned_data['companion']
+        description = models.CarType.objects.get(description=car)
+        vacancy = description.vacancy
+        counter = models.List.objects.filter(date=date, car=car).count()
+        get_user = models.List.objects.filter(date=date, cns=cns)
+        total_vacancy = vacancy - counter
+        total_user = companion + 1
+        if total_vacancy < total_user:
+            if total_vacancy > 1:
+                raise forms.ValidationError('Veículo com {} vagas!'.format(vacancy - counter))
+            else:
+                raise forms.ValidationError('Veículo com {} vaga!'.format(vacancy - counter))
+        if get_user:
+            raise forms.ValidationError('Usuário já agendado no {}'.format(get_user[0].car))
+
     def clean_cns(self):
         cns = self.cleaned_data['cns']
         return cns

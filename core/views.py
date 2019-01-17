@@ -228,7 +228,7 @@ def backup_database(request):
 
 
 def folder(request):
-    file = finders.find('pdf/folder.pdf')
+    file = finders.find('pdf/file.pdf')
     wrapper = FileWrapper(open(file, 'rb'))
     response = HttpResponse(wrapper, content_type='application/pdf')
     response['Content-Disposition'] = 'inline; filename=Folha Extra.pdf'
