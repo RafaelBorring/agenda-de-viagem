@@ -12,31 +12,31 @@ class UserRegisterForm(forms.ModelForm):
         fields = '__all__'
 
     def clean_cns(self):
-        cns = self.cleaned_data['cns']
+        cns = self.cleaned_data.get('cns')
         if not views.Valid(cns=cns).valid_cns() or models.UserRegister.objects.filter(cns=cns):
             raise forms.ValidationError(self.message)
         return cns
 
     def clean_nome(self):
-        nome = self.cleaned_data['name']
+        nome = self.cleaned_data.get('name')
         if not nome.isupper():
             raise forms.ValidationError(self.message)
         return nome
 
     def clean_birth(self):
-        birth = self.cleaned_data['birth']
+        birth = self.cleaned_data.get('birth')
         if not views.Valid(birth=birth).valid_birth():
             raise forms.ValidationError(self.message)
         return birth
 
     def clean_address(self):
-        address = self.cleaned_data['address']
+        address = self.cleaned_data.get('address')
         if not address.isupper():
             raise forms.ValidationError(self.message)
         return address
 
     def clean_telefone(self):
-        telephone = self.cleaned_data['telephone']
+        telephone = self.cleaned_data.get('telephone')
         if telephone:
             if not views.Valid(telephone=telephone).valid_telephone():
                 raise forms.ValidationError(self.message)
@@ -51,16 +51,18 @@ class ListForm(forms.ModelForm):
         fields = '__all__'
 
     def clean(self):
-        cns = self.cleaned_data['cns']
-        date = self.cleaned_data['date']
-        car = self.cleaned_data['car']
-        companion = self.cleaned_data['companion']
+        cns = self.cleaned_data.get('cns')
+        date = self.cleaned_data.get('date')
+        car = self.cleaned_data.get('car')
+        companion = self.cleaned_data.get('companion')
         description = models.CarType.objects.get(description=car)
         vacancy = description.vacancy
         counter = models.List.objects.filter(date=date, car=car).count()
         get_user = models.List.objects.filter(date=date, cns=cns)
         total_vacancy = vacancy - counter
         total_user = companion + 1
+        if not cns:
+            raise forms.ValidationError('Delete e remarque!')
         if total_vacancy < total_user:
             if total_vacancy > 1:
                 raise forms.ValidationError('Veículo com {} vagas!'.format(vacancy - counter))
@@ -70,30 +72,30 @@ class ListForm(forms.ModelForm):
             raise forms.ValidationError('Usuário já agendado no {}'.format(get_user[0].car))
 
     def clean_cns(self):
-        cns = self.cleaned_data['cns']
+        cns = self.cleaned_data.get('cns')
         return cns
 
     def clean_name(self):
-        name = self.cleaned_data['name']
+        name = self.cleaned_data.get('name')
         if not name.isupper():
             raise forms.ValidationError(self.message)
         return name
 
     def clean_address(self):
-        address = self.cleaned_data['address']
+        address = self.cleaned_data.get('address')
         if not address.isupper():
             raise forms.ValidationError(self.message)
         return address
 
     def clean_telephone(self):
-        telephone = self.cleaned_data['telephone']
+        telephone = self.cleaned_data.get('telephone')
         if telephone:
             if not views.Valid(telephone=telephone).valid_telephone():
                 raise forms.ValidationError(self.message)
         return telephone
 
     def clean_date(self):
-        date = self.cleaned_data['date']
+        date = self.cleaned_data.get('date')
         if date is None:
             raise forms.ValidationError(self.message)
         return date
