@@ -83,7 +83,9 @@ class PrintList(View):
         pdf3 = BytesIO()
         self.tmp_pdf1 = canvas.Canvas(pdf1, pagesize=A4)
         for car in models.CarType.objects.all():
-            self.passag = listall.filter(car=car).count()
+            self.passag = 0
+            for n in listall.filter(car=car):
+                self.passag += n.companion + 1
             if self.passag > 0:
                 self.tmp_pdf1.setFont("Times-Bold", 14)
                 self.tmp_pdf1.drawString(A4[0] / 2 + 1.4 * cm, self.position + cm, '{}'.format(car))
@@ -139,37 +141,36 @@ class PrintList(View):
                     self.listed.date.year, self.passag, self.page, ceil(self.number / 5)
                 )
             )
-        if "Acompanhante" not in self.listed.name:
-            while len(self.listed.name) > 28:
-                if len(name[name_size - 2]) > 3:
-                    self.listed.name = self.listed.name.replace(
-                        name[name_size - 2], name[name_size - 2][0]
-                    )
-                name_size -= 1
-            self.tmp_pdf1.setFont("Times-BoldItalic", 14)
-            self.tmp_pdf1.drawString(2.25 * cm, self.position, self.listed.name)
-            self.tmp_pdf1.drawString(15.8 * cm, self.position - 2.9 * cm, self.listed.cns)
-            if len(self.listed.reference) > 12:
-                self.tmp_pdf1.drawString(15.35 * cm, self.position, self.listed.reference[:13])
-                self.tmp_pdf1.drawString(
-                    13 * cm, self.position - 0.57 * cm, self.listed.reference[13:]
+        while len(self.listed.name) > 28:
+            if len(name[name_size - 2]) > 3:
+                self.listed.name = self.listed.name.replace(
+                    name[name_size - 2], name[name_size - 2][0]
                 )
-            else:
-                self.tmp_pdf1.drawString(15.35 * cm, self.position, self.listed.reference)
-            self.tmp_pdf1.drawString(3.15 * cm, self.position - 0.57 * cm, self.listed.address)
-            self.tmp_pdf1.drawString(2.8 * cm, self.position - 1.14 * cm, self.listed.local)
+            name_size -= 1
+        self.tmp_pdf1.setFont("Times-BoldItalic", 14)
+        self.tmp_pdf1.drawString(2.25 * cm, self.position, self.listed.name)
+        self.tmp_pdf1.drawString(15.8 * cm, self.position - 2.9 * cm, self.listed.cns)
+        if len(self.listed.reference) > 12:
+            self.tmp_pdf1.drawString(15.35 * cm, self.position, self.listed.reference[:13])
             self.tmp_pdf1.drawString(
-                14.75 * cm, self.position - 1.14 * cm, str(self.listed.get_hour_display())
+                13 * cm, self.position - 0.57 * cm, self.listed.reference[13:]
             )
-            self.tmp_pdf1.drawString(16.5 * cm, self.position - 1.14 * cm, self.listed.telephone)
-            self.tmp_pdf1.drawString(3.4 * cm, self.position - 1.71 * cm, self.listed.goal)
-            self.tmp_pdf1.drawString(13.9 * cm, self.position - 1.71 * cm, self.listed.note)
-            self.tmp_pdf1.drawString(7.7 * cm, self.position - 2.28 * cm, self.listed.search)
-            self.tmp_pdf1.drawCentredString(
-                5.34 * cm, self.position - 3.41 * cm, str(self.listed.companion)
-            )
-            self.position -= 4.89 * cm
-            self.per_page -= 1
+        else:
+            self.tmp_pdf1.drawString(15.35 * cm, self.position, self.listed.reference)
+        self.tmp_pdf1.drawString(3.15 * cm, self.position - 0.57 * cm, self.listed.address)
+        self.tmp_pdf1.drawString(2.8 * cm, self.position - 1.14 * cm, self.listed.local)
+        self.tmp_pdf1.drawString(
+            14.75 * cm, self.position - 1.14 * cm, str(self.listed.get_hour_display())
+        )
+        self.tmp_pdf1.drawString(16.5 * cm, self.position - 1.14 * cm, self.listed.telephone)
+        self.tmp_pdf1.drawString(3.4 * cm, self.position - 1.71 * cm, self.listed.goal)
+        self.tmp_pdf1.drawString(13.9 * cm, self.position - 1.71 * cm, self.listed.note)
+        self.tmp_pdf1.drawString(7.7 * cm, self.position - 2.28 * cm, self.listed.search)
+        self.tmp_pdf1.drawCentredString(
+            5.34 * cm, self.position - 3.41 * cm, str(self.listed.companion)
+        )
+        self.position -= 4.89 * cm
+        self.per_page -= 1
         if self.per_page == 0:
             self.tmp_pdf1.showPage()
             self.page += 1

@@ -57,12 +57,12 @@ class ListForm(forms.ModelForm):
         companion = self.cleaned_data.get('companion')
         description = models.CarType.objects.get(description=car)
         vacancy = description.vacancy
-        counter = models.List.objects.filter(date=date, car=car).count()
+        counter = 0
+        for n in models.List.objects.filter(date=date, car=car):
+            counter += n.companion + 1
         get_user = models.List.objects.filter(date=date, cns=cns)
         total_vacancy = vacancy - counter
         total_user = companion + 1
-        if not cns:
-            raise forms.ValidationError('Delete e remarque!')
         if total_vacancy < total_user:
             if total_vacancy > 1:
                 raise forms.ValidationError('Veículo com {} vagas!'.format(vacancy - counter))
@@ -136,44 +136,6 @@ class ListAdmin(admin.ModelAdmin):
     search_fields = ('cns', 'name', 'reference')
     date_hierarchy = 'date'
     change_list_template = 'admin.change_list.html'
-
-    def save_model(self, request, obj, form, change):
-        obj.save()
-        split_name = obj.name.split(' ')
-        if len(split_name) > 1:
-            cname = '{} {} {}'.format('Acompanhante de', split_name[0], split_name[-1])
-        else:
-            cname = '{} {}'.format('Acompanhante de', split_name[0])
-        if change:
-            models.List.objects.filter(id_companion=obj.id).delete()
-            while obj.companion > 0:
-                models.List(name=cname, date=obj.date, car=obj.car, id_companion=obj.id).save()
-                obj.companion -= 1
-        if obj.companion > 0 and not change:
-            while obj.companion > 0:
-                models.List(name=cname, date=obj.date, car=obj.car, id_companion=obj.id).save()
-                obj.companion -= 1
-
-    def delete_model(self, request, obj):
-        models.List.objects.filter(id_companion=obj.id).delete()
-        obj.delete()
-
-    def get_readonly_fields(self, request, obj=None):
-        if obj and obj.cns:
-            return ['cns', 'name', 'reference', 'address', 'telephone']
-        elif obj and not obj.cns:
-            return [
-                'cns', 'name', 'reference', 'address', 'telephone', 'local', 'goal', 'companion', 'date', 'hour',
-                'search', 'note'
-            ]
-        else:
-            return []
-
-    def has_delete_permission(self, request, obj=None):
-        if obj is None or obj.cns:
-            return True
-        else:
-            return False
 
     class Media:
         js = (

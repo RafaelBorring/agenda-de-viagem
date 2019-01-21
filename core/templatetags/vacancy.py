@@ -32,9 +32,11 @@ class EventCalendar(LocaleHTMLCalendar):
     def formatday(self, day, weekday):
         cars = ''
         for car in CarType.objects.all():
-            count = List.objects.filter(date__year=self.year, date__month=self.month, date__day=day, car=car).count()
-            if count > 0:
-                cars += '<p>{} <span>{:02d}</span></p>'.format(car, int(car.vacancy - count))
+            counter = 0
+            for n in List.objects.filter(date__year=self.year, date__month=self.month, date__day=day, car=car):
+                counter += n.companion + 1
+            if counter > 0:
+                cars += '<p>{} <span>{:02d}</span></p>'.format(car, int(car.vacancy - counter))
         dias = range(0, 5)
         feriados = Holiday.objects.filter(date__year=self.year, date__month=self.month, date__day=day)
         if day != 0:
