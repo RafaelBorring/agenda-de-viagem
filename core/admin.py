@@ -57,10 +57,14 @@ class ListForm(forms.ModelForm):
         companion = self.cleaned_data.get('companion')
         description = models.CarType.objects.get(description=car)
         vacancy = description.vacancy
+        get_user = models.List.objects.filter(date=date, cns=cns)
         counter = 0
+        if self.instance.pk:
+            get_pk = models.List.objects.get(pk=self.instance.pk)
+            counter -= get_pk.companion + 1
+            get_user = None
         for n in models.List.objects.filter(date=date, car=car):
             counter += n.companion + 1
-        get_user = models.List.objects.filter(date=date, cns=cns)
         total_vacancy = vacancy - counter
         total_user = companion + 1
         if total_vacancy < total_user:

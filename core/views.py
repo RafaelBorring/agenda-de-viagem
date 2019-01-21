@@ -74,7 +74,6 @@ class PrintList(View):
         response = HttpResponse(content_type='application/pdf')
         response['Content-Disposition'] = 'filename="Lista de Viagens - {}.{}.{}.pdf".format(day, month, year)'
         listall = models.List.objects.filter(date__day=day, date__month=month, date__year=year)
-        self.number = listall.exclude(cns='').count()
         self.position = 25.5 * cm
         self.per_page = 5
         self.page = 1
@@ -83,6 +82,7 @@ class PrintList(View):
         pdf3 = BytesIO()
         self.tmp_pdf1 = canvas.Canvas(pdf1, pagesize=A4)
         for car in models.CarType.objects.all():
+            self.number = listall.filter(car=car).count()
             self.passag = 0
             for n in listall.filter(car=car):
                 self.passag += n.companion + 1
@@ -116,9 +116,7 @@ class PrintList(View):
         pdf1.close()
         pdf2.close()
         pdf3.close()
-        response['Content-Disposition'] = 'inline; filename=agenda-de-viagem_{}-{}-{}.pdf'.format(
-            day, month, year
-        )
+        response['Content-Disposition'] = 'inline; filename=agenda-de-viagem_{}-{}-{}.pdf'.format(day, month, year)
         return response
 
     def write_list(self):
