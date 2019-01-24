@@ -34,13 +34,16 @@ class UserRegister(models.Model):
     sex = models.CharField('Sexo', max_length=1, choices=SEX, blank=True)
     address = models.CharField('Endereço', max_length=100, blank=True)
     telephone = models.CharField('Telefone', max_length=15, blank=True)
+    enable = models.BooleanField('Ativo', default=True)
+    create_on = models.DateField('Criado em:', auto_now_add=True, blank=True)
+    update_on = models.DateField('Atualizado em:', auto_now=True, blank=True)
+
+    def __str__(self):
+        return self.name
 
     class Meta:
         verbose_name = 'Cadastro de Usuário'
         verbose_name_plural = 'Cadastro de Usuários'
-
-    def __str__(self):
-        return self.name
 
 
 class List(models.Model):
@@ -57,39 +60,43 @@ class List(models.Model):
     search = models.CharField('Local onde pegará o transporte', max_length=30, blank=True)
     note = models.CharField('Observação', max_length=15, blank=True)
     companion = models.DecimalField('Acompanhante', default=0, blank=True, max_digits=2, decimal_places=0)
-    id_companion = models.IntegerField('ID do Acompanhante', null=True, blank=True)
     create_on = models.DateField('Criado em:', auto_now_add=True, blank=True)
     update_on = models.DateField('Atualizado em:', auto_now=True, blank=True)
+
+    def __str__(self):
+        return self.name
 
     class Meta:
         verbose_name = 'Lista de Passageiros'
         verbose_name_plural = 'Listas de Passageiros'
 
-    def __str__(self):
-        return self.name
-
 
 class Holiday(models.Model):
     name = models.CharField('Feriado de', max_length=50)
     date = models.DateField('Dia', unique=True)
+    create_on = models.DateField('Criado em:', auto_now_add=True, blank=True)
+    update_on = models.DateField('Atualizado em:', auto_now=True, blank=True)
+
+    def __str__(self):
+        return self.name
 
     class Meta:
         verbose_name = 'Feriado'
         verbose_name_plural = 'Feriados'
 
-    def __str__(self):
-        return self.name
-
 
 class City(models.Model):
-    name = models.CharField('Município', max_length=50)
+    name = models.CharField('Município', max_length=50, unique=True)
+    enable = models.BooleanField('Ativo', default=True)
+    create_on = models.DateField('Criado em:', auto_now_add=True, blank=True)
+    update_on = models.DateField('Atualizado em:', auto_now=True, blank=True)
+
+    def __str__(self):
+        return self.name
 
     class Meta:
         verbose_name = 'Município'
         verbose_name_plural = 'Municípios'
-
-    def __str__(self):
-        return self.name
 
 
 class CarType(models.Model):
@@ -97,10 +104,13 @@ class CarType(models.Model):
     type = models.CharField('Tipo', max_length=1, choices=CAR)
     destiny = models.ForeignKey('City', on_delete=models.CASCADE, verbose_name='Destino')
     vacancy = models.DecimalField('N° de Vagas', max_digits=2, decimal_places=0)
+    enable = models.BooleanField('Ativo', default=True)
+    create_on = models.DateField('Criado em:', auto_now_add=True, blank=True)
+    update_on = models.DateField('Atualizado em:', auto_now=True, blank=True)
+
+    def __str__(self):
+        return self.description
 
     class Meta:
         verbose_name = 'Veículo'
         verbose_name_plural = 'Veículos'
-
-    def __str__(self):
-        return self.description
