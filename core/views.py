@@ -144,7 +144,7 @@ class PrintList(View):
                 )
             )
         self.tmp_pdf1.setFont("Times-BoldItalic", 14)
-        self.tmp_pdf1.drawString(2.25 * cm, self.position, '{} {}'.format(self.counter, listed.name))
+        self.tmp_pdf1.drawString(2.25 * cm, self.position, listed.name)
         self.tmp_pdf1.drawString(15.8 * cm, self.position - 2.9 * cm, listed.cns)
         if len(listed.reference) > 12:
             self.tmp_pdf1.drawString(15.35 * cm, self.position, listed.reference[:13])
