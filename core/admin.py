@@ -47,8 +47,8 @@ class UserRegisterForm(forms.ModelForm):
 class ListForm(forms.ModelForm):
     message = 'Habilite o javascript!'
 
-    def __init__(self, *args,**kwargs):
-        super().__init__(*args,**kwargs)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.fields['car'].queryset = models.CarType.objects.exclude(enable=False)
 
     def clean(self):
@@ -112,8 +112,8 @@ class ListForm(forms.ModelForm):
 
 class CarTypeForm(forms.ModelForm):
 
-    def __init__(self, *args,**kwargs):
-        super().__init__(*args,**kwargs)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.fields['destiny'].queryset = models.City.objects.exclude(enable=False)
 
 

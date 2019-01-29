@@ -81,7 +81,7 @@ class PrintList(View):
         pdf2 = BytesIO()
         pdf3 = BytesIO()
         self.tmp_pdf1 = canvas.Canvas(pdf1, pagesize=A4)
-        for car in models.CarType.objects.all():
+        for car in models.CarType.objects.all().order_by('-type', 'destiny', 'description'):
             passenger = 0
             companion = 0
             for n in list_all.filter(car=car):
@@ -91,11 +91,10 @@ class PrintList(View):
             if passenger > 0:
                 for listed in list_all.filter(car=car):
                     self.write_list(car, listed, passenger, companion)
-                if not int(passenger / 5):
-                    self.tmp_pdf1.showPage()
-                    self.position = 25.5 * cm
-                    self.per_page = 5
-                    self.page = 1
+                self.tmp_pdf1.showPage()
+                self.position = 25.5 * cm
+                self.per_page = 5
+                self.page = 1
         self.tmp_pdf1.save()
         read_pdf1 = PdfFileReader(pdf1)
         total_pages = read_pdf1.getNumPages()
@@ -162,7 +161,7 @@ class PrintList(View):
         self.position -= 4.89 * cm
         self.per_page -= 1
         self.counter -= 1
-        if self.per_page == 0:
+        if self.per_page == 0 and self.counter != 0:
             self.tmp_pdf1.showPage()
             self.page += 1
             self.per_page = 5

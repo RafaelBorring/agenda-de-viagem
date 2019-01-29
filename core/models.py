@@ -114,3 +114,4 @@ class CarType(models.Model):
     class Meta:
         verbose_name = 'Veículo'
         verbose_name_plural = 'Veículos'
+        ordering = ('-type', 'destiny', 'description')
